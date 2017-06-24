@@ -22,7 +22,7 @@ import java.util.Map;
 public class UrlContentDiscCache {
 	private static final Logger LOG = LogManager.getLogger(UrlContentDiscCache.class);
 
-	private static final String PROPERTY_BASE_DIR = "url_content_disc_cache.base_dir";
+	private static final String PROPERTY_BASE_DIR = "urlContentDiscCache.baseDir";
 
 	private Path baseDir;
 	private final Map<String, File> files = new HashMap<>();
