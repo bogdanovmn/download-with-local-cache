@@ -104,6 +104,7 @@ public class UrlContentDiskCache {
 			}
 
 			this.files.put(this.urlToKey(url), outputFile);
+			LOG.info("Download to {}", newFilePath.toString());
 		}
 		else {
 			throw new IOException("Can't create cache dir: " + newFilePath.getParent().toString());
@@ -117,13 +118,18 @@ public class UrlContentDiskCache {
 	}
 
 	private Path urlToFileName(URL url) {
+		String key = this.urlToKey(url);
+		String keyFirstChar = key.substring(0, 1);
+
 		return Paths.get(
 			url.getHost().replaceAll("\\W", "_"),
+			keyFirstChar,
 			String.format(
 				"%s.%s",
-				this.urlToKey(url),
+				key,
 				String.format("%s__%s", url.getPath(), url.getQuery())
 					.replaceAll("\\W", "_")
+					.replaceFirst("__null", "")
 			)
 		);
 	}
