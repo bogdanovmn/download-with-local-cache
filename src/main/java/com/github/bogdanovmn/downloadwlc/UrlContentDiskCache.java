@@ -2,8 +2,8 @@ package com.github.bogdanovmn.downloadwlc;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.UrlResource;
 import org.springframework.util.DigestUtils;
 
@@ -19,10 +19,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class UrlContentDiscCache {
-	private static final Logger LOG = LogManager.getLogger(UrlContentDiscCache.class);
+public class UrlContentDiskCache {
+	private static final Logger LOG = LoggerFactory.getLogger(UrlContentDiskCache.class);
 
-	private static final String PROPERTY_BASE_DIR = "urlContentDiscCache.baseDir";
+	private static final String PROPERTY_BASE_DIR = "urlContentDiskCache.baseDir";
 
 	private Path baseDir;
 	private final Map<String, File> files = new HashMap<>();
@@ -31,11 +31,11 @@ public class UrlContentDiscCache {
 	private boolean isInitialized = false;
 
 
-	public UrlContentDiscCache(String tag) {
+	public UrlContentDiskCache(String tag) {
 		this.tag = tag;
 	}
 
-	public UrlContentDiscCache(Class<?> clazz) {
+	public UrlContentDiskCache(Class<?> clazz) {
 		this.tag = clazz.getSimpleName();
 	}
 
