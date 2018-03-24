@@ -1,5 +1,6 @@
 package com.github.bogdanovmn.downloadwlc;
 
+import com.github.bogdanovmn.httpclient.simple.SimpleHttpClient;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ public class UrlContentDiskCache {
 	private final Map<String, File> files = new HashMap<>();
 	private final String tag;
 
+	private final SimpleHttpClient httpClient = new SimpleHttpClient("");
+
 	private boolean isInitialized = false;
 
 
@@ -39,7 +42,7 @@ public class UrlContentDiskCache {
 		this.tag = clazz.getSimpleName();
 	}
 
-	private void init()
+	private synchronized void init()
 		throws IOException
 	{
 		if (!this.isInitialized) {
@@ -100,6 +103,10 @@ public class UrlContentDiskCache {
 				IOUtils.copy(
 					new UrlResource(url).getInputStream(),
 					output
+				);
+				output.write(
+					this.httpClient.get(url.toString())
+						.getBytes()
 				);
 			}
 
