@@ -6,7 +6,7 @@
 
 	<groupId>com.github.bogdanovmn.dwlc</groupId>
 	<artifactId>download-with-local-cache</artifactId>
-	<version>1.6.2</version>
+	<version>1.7.0</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -34,9 +34,14 @@
 			<version>1.7.25</version>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.25</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
