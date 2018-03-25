@@ -2,20 +2,20 @@ package com.github.bogdanovmn.downloadwlc;
 
 import com.github.bogdanovmn.httpclient.simple.SimpleHttpClient;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.UrlResource;
-import org.springframework.util.DigestUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -100,10 +100,6 @@ public class UrlContentDiskCache {
 			try (
 				FileOutputStream output = new FileOutputStream(outputFile)
 			) {
-				IOUtils.copy(
-					new UrlResource(url).getInputStream(),
-					output
-				);
 				output.write(
 					this.httpClient.get(url.toString())
 						.getBytes()
@@ -121,7 +117,19 @@ public class UrlContentDiskCache {
 	}
 
 	private String urlToKey(URL url) {
-		return DigestUtils.md5DigestAsHex(url.toString().getBytes());
+		try {
+			return String.format(
+				"%032x",
+				new BigInteger(
+					1,
+					MessageDigest.getInstance("MD5")
+						.digest(url.toString().getBytes())
+				)
+			);
+		}
+		catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private Path urlToFileName(URL url) {
