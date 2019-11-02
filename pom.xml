@@ -6,7 +6,7 @@
 
 	<groupId>com.github.bogdanovmn.dwlc</groupId>
 	<artifactId>download-with-local-cache</artifactId>
-	<version>1.7.0</version>
+	<version>1.7.1</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -18,8 +18,8 @@
 		<!-- My Libs -->
 		<dependency>
 			<groupId>com.github.bogdanovmn.httpclient</groupId>
-			<artifactId>http-client-impl-simple</artifactId>
-			<version>1.1</version>
+			<artifactId>http-client-simple</artifactId>
+			<version>2.1.5</version>
 		</dependency>
 
 		<!-- Libs -->

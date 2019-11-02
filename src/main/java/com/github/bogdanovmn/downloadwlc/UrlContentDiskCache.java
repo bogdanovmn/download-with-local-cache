@@ -29,7 +29,7 @@ public class UrlContentDiskCache {
 	private final Map<String, File> files = new HashMap<>();
 	private final String tag;
 
-	private final SimpleHttpClient httpClient = new SimpleHttpClient("");
+	private final SimpleHttpClient httpClient = new SimpleHttpClient();
 
 	private boolean isInitialized = false;
 
@@ -42,10 +42,8 @@ public class UrlContentDiskCache {
 		this.tag = clazz.getSimpleName();
 	}
 
-	private synchronized void init()
-		throws IOException
-	{
-		if (!this.isInitialized) {
+	private synchronized void init() throws IOException {
+		if (!isInitialized) {
 			LOG.info("Init cache...");
 
 			String baseDirProperty = System.getProperty(PROPERTY_BASE_DIR, "");
@@ -54,15 +52,15 @@ public class UrlContentDiskCache {
 					String.format("Cache base dir expected (use %s property)", PROPERTY_BASE_DIR)
 				);
 			}
-			this.baseDir = Paths.get(baseDirProperty, this.tag);
+			baseDir = Paths.get(baseDirProperty, tag);
 
 			if (!this.baseDir.toFile().exists()) {
-				LOG.info("Create base dir: {}", this.baseDir);
-				Files.createDirectories(this.baseDir);
+				LOG.info("Create base dir: {}", baseDir);
+				Files.createDirectories(baseDir);
 			}
 
 			try {
-				Iterator<File> fileIterator = FileUtils.iterateFiles(this.baseDir.toFile(), null, true);
+				Iterator<File> fileIterator = FileUtils.iterateFiles(baseDir.toFile(), null, true);
 				while (fileIterator.hasNext()) {
 					File file = fileIterator.next();
 					String[] nameParts = file.getName().split("\\.", 2);
@@ -74,23 +72,21 @@ public class UrlContentDiskCache {
 							)
 						);
 					}
-					this.files.put(nameParts[0], file);
+					files.put(nameParts[0], file);
 				}
 			}
 			finally {
-				this.isInitialized = true;
+				isInitialized = true;
 			}
-			LOG.info("Init completed. Total urls in cache: {}", this.files.entrySet().size());
+			LOG.info("Init completed. Total urls in cache: {}", files.entrySet().size());
 		}
 
 	}
 
-	private File put(URL url)
-		throws IOException
-	{
+	private File put(URL url) throws IOException {
 		Path newFilePath = Paths.get(
-			this.baseDir.toString(),
-			this.urlToFileName(url).toString()
+			baseDir.toString(),
+			urlToFileName(url).toString()
 		);
 
 		File outputFile;
@@ -101,12 +97,12 @@ public class UrlContentDiskCache {
 				FileOutputStream output = new FileOutputStream(outputFile)
 			) {
 				output.write(
-					this.httpClient.get(url.toString())
+					httpClient.get(url.toString())
 						.getBytes()
 				);
 			}
 
-			this.files.put(this.urlToKey(url), outputFile);
+			files.put(urlToKey(url), outputFile);
 			LOG.info("Download to {}", newFilePath.toString());
 		}
 		else {
@@ -133,7 +129,7 @@ public class UrlContentDiskCache {
 	}
 
 	private Path urlToFileName(URL url) {
-		String key = this.urlToKey(url);
+		String key = urlToKey(url);
 		String keyFirstChar = key.substring(0, 1);
 
 		return Paths.get(
@@ -149,14 +145,12 @@ public class UrlContentDiskCache {
 		);
 	}
 
-	private byte[] get(URL url)
-		throws IOException
-	{
+	public byte[] get(URL url) throws IOException {
 		this.init();
 
-		byte[] result = null;
+		byte[] result;
 
-		File file = this.files.get(this.urlToKey(url));
+		File file = files.get(urlToKey(url));
 		if (file == null) {
 			LOG.info("Cache not found: {}", url.toString());
 			file = this.put(url);
