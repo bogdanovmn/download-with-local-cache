@@ -69,20 +69,9 @@
 
 	<distributionManagement>
 		<repository>
-			<id>bintray-repo-maven</id>
-			<url>https://api.bintray.com/maven/bogdanovmn/maven-repo/java-download-with-local-cache/;publish=1</url>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/bogdanovmn/java-common</url>
 		</repository>
 	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<id>my</id>
-			<name>bintray</name>
-			<url>https://dl.bintray.com/bogdanovmn/maven-repo</url>
-		</repository>
-	</repositories>
 
 </project>
